@@ -1,0 +1,134 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --wp-top: #dfeafa;
+  --wp-mid: #b9cdec;
+  --wp-bot: #8298cb;
+  --wp-glow: rgba(255, 255, 255, 0.55);
+  --wp-tint: rgba(124, 108, 224, 0.35);
+  --menubar-bg: rgba(255, 255, 255, 0.55);
+  --titlebar-top: rgba(250, 251, 254, 0.92);
+  --titlebar-bot: rgba(250, 251, 254, 0.92);
+  --window-bg: rgba(250, 251, 253, 0.7);
+  --window-body: rgba(255, 255, 255, 0.6);
+  --dock-bg: rgba(255, 255, 255, 0.42);
+  --glass-edge: rgba(255, 255, 255, 0.65);
+  --border-window: 1px solid rgba(15, 23, 42, 0.12);
+  --shadow-window:
+    0 24px 60px rgba(15, 23, 42, 0.25), 0 2px 8px rgba(15, 23, 42, 0.08);
+  --radius-window: 14px;
+  --light-close: #ff5f57;
+  --light-min: #febc2e;
+  --light-max: #28c840;
+  --text-strong: #1e2532;
+  --text-soft: #5b6577;
+  --accent: #6366f1;
+  --font:
+    "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+    "Apple SD Gothic Neo", sans-serif;
+}
+
+:root[data-theme="graphite"] {
+  --wp-top: #e4e7ec;
+  --wp-mid: #c3c9d2;
+  --wp-bot: #8e96a3;
+  --wp-glow: rgba(255, 255, 255, 0.6);
+  --wp-tint: rgba(100, 116, 139, 0.28);
+  --accent: #64748b;
+  --light-close: #9aa2ab;
+  --light-min: #9aa2ab;
+  --light-max: #9aa2ab;
+}
+
+:root[data-theme="midnight"] {
+  --wp-top: #1b2233;
+  --wp-mid: #131a29;
+  --wp-bot: #0a0f1a;
+  --wp-glow: rgba(99, 132, 204, 0.3);
+  --wp-tint: rgba(139, 92, 246, 0.22);
+  --menubar-bg: rgba(16, 21, 32, 0.6);
+  --titlebar-top: rgba(30, 37, 52, 0.92);
+  --titlebar-bot: rgba(30, 37, 52, 0.92);
+  --window-bg: rgba(20, 26, 40, 0.72);
+  --window-body: rgba(13, 18, 28, 0.6);
+  --dock-bg: rgba(40, 50, 70, 0.4);
+  --glass-edge: rgba(255, 255, 255, 0.12);
+  --border-window: 1px solid rgba(0, 0, 0, 0.55);
+  --shadow-window:
+    0 24px 60px rgba(0, 0, 0, 0.6), 0 4px 10px rgba(0, 0, 0, 0.35);
+  --text-strong: #e8edf4;
+  --text-soft: #a8b2c1;
+  --accent: #818cf8;
+}
+
+:root[data-theme="aurora"] {
+  --wp-top: #0e2b33;
+  --wp-mid: #0b1f2c;
+  --wp-bot: #07101c;
+  --wp-glow: rgba(94, 234, 212, 0.28);
+  --wp-tint: rgba(56, 189, 248, 0.2);
+  --menubar-bg: rgba(10, 24, 32, 0.55);
+  --titlebar-top: rgba(19, 38, 48, 0.92);
+  --titlebar-bot: rgba(19, 38, 48, 0.92);
+  --window-bg: rgba(13, 30, 40, 0.72);
+  --window-body: rgba(8, 20, 28, 0.6);
+  --dock-bg: rgba(30, 64, 80, 0.38);
+  --glass-edge: rgba(150, 255, 222, 0.18);
+  --border-window: 1px solid rgba(0, 0, 0, 0.5);
+  --shadow-window:
+    0 24px 60px rgba(0, 0, 0, 0.55), 0 4px 10px rgba(0, 0, 0, 0.32);
+  --text-strong: #e7f7f0;
+  --text-soft: #9ec9bb;
+  --accent: #2dd4bf;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+}
+body {
+  font-family: var(--font);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: var(--accent);
+}
+
+:root[data-perf="lite"] {
+  --menubar-bg: rgba(244, 247, 252, 0.94);
+  --window-bg: rgba(250, 251, 253, 0.97);
+  --window-body: rgba(255, 255, 255, 0.97);
+  --dock-bg: rgba(255, 255, 255, 0.8);
+  --shadow-window: 0 10px 26px rgba(10, 25, 50, 0.3);
+}
+:root[data-perf="lite"][data-theme="midnight"] {
+  --menubar-bg: rgba(18, 24, 34, 0.96);
+  --window-bg: rgba(22, 28, 40, 0.98);
+  --window-body: rgba(15, 20, 30, 0.98);
+  --dock-bg: rgba(44, 54, 72, 0.92);
+}
+:root[data-perf="lite"][data-theme="aurora"] {
+  --menubar-bg: rgba(12, 26, 40, 0.96);
+  --window-bg: rgba(16, 32, 48, 0.98);
+  --window-body: rgba(10, 22, 34, 0.98);
+  --dock-bg: rgba(46, 84, 104, 0.92);
+}
+:root[data-perf="lite"] .menubar,
+:root[data-perf="lite"] .menubar_dropdown,
+:root[data-perf="lite"] .dock,
+:root[data-perf="lite"] .win {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+:root[data-perf="lite"] .desktop::before {
+  animation: none;
+}
