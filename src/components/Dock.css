@@ -1,0 +1,77 @@
+.dock {
+  position: fixed;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-end;
+  gap: 7px;
+  height: 58px;
+  padding: 0 10px 5px;
+  background: var(--dock-bg);
+  border: 1px solid var(--glass-edge);
+  border-radius: 20px;
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 10px 28px rgba(10, 25, 50, 0.35);
+  z-index: 9999;
+}
+
+.dock__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: default;
+  padding: 2px;
+  transition: transform 0.09s ease-out;
+  transform-origin: bottom center;
+  will-change: transform;
+}
+
+.dock__icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  line-height: 0;
+  color: var(--text-strong);
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.28));
+}
+.dock__icon svg {
+  width: 34px;
+  height: 34px;
+}
+
+.dock__dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--text-strong);
+  opacity: 0.6;
+  margin-top: 2px;
+}
+
+.dock__label {
+  position: absolute;
+  bottom: calc(100%+10px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 9px;
+  border-radius: 7px;
+  background: rgba(30, 36, 46, 0.85);
+  color: #fff;
+  font-size: 11.5px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+}
+
+.dock__item:hover .dock__label {
+  opacity: 1;
+}
