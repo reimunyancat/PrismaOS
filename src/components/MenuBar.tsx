@@ -71,7 +71,7 @@ function formatNow(): string {
     day: "numeric",
     weekday: "short",
   });
-  const time = d.toLocaleTimeString("ko_KR", {
+  const time = d.toLocaleTimeString("ko-KR", {
     hour: "2-digit",
     minute: "2-digit",
   });
