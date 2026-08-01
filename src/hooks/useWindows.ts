@@ -88,5 +88,20 @@ export function useWindows() {
     );
   }, []);
 
-  return { windows, open, close, focus, minimize, move, resize };
+  const resetLayout = useCallback(() => {
+    localStorage.removeItem(LAYOUT_KEY);
+    setWindows((prev) =>
+      prev.map((w, i) => {
+        const init = clampGeom({
+          x: 120 + i * 30,
+          y: 90 + i * 30,
+          width: 460,
+          height: 340,
+        });
+        return { ...w, ...init };
+      }),
+    );
+  }, []);
+
+  return { windows, open, close, focus, minimize, move, resize, resetLayout };
 }
