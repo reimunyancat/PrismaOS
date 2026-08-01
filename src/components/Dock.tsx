@@ -13,7 +13,7 @@ export function Dock({ apps, openIds, onLaunch }: Props) {
 
   return (
     <div
-      className="dock"
+      className={`dock ${pointerX !== null ? "dock--hover" : ""}`}
       onPointerMove={(e) => {
         if (e.pointerType === "mouse") setPointerX(e.clientX);
       }}

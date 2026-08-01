@@ -14,10 +14,11 @@ export function TerminalApp() {
   const [input, setInput] = useState("");
   const histRef = useRef<string[]>([]);
   const histIdx = useRef(-1);
-  const endRef = useRef<HTMLDivElement>(null);
+  const termRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    const el = termRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
   }, [lines]);
 
   function run(raw: string) {
@@ -108,6 +109,7 @@ export function TerminalApp() {
   return (
     <div
       className="term"
+      ref={termRef}
       onClick={(e) => e.currentTarget.querySelector("input")?.focus()}
     >
       {lines.map((l, i) => (
@@ -124,7 +126,6 @@ export function TerminalApp() {
           onKeyDown={onKeyDown}
         />
       </div>
-      <div ref={endRef} />
     </div>
   );
 }

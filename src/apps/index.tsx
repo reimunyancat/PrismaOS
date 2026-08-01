@@ -7,6 +7,7 @@ import {
 } from "../components/icons";
 import { AboutApp } from "./AboutApp";
 import { AboutOSApp } from "./AboutOSApp";
+import { MusicApp } from "./MusicApp";
 import { ProjectsApp } from "./ProjectsApp";
 import { TerminalApp } from "./TerminalApp";
 
@@ -36,8 +37,8 @@ export const APPS: AppDef[] = [
     id: "music",
     title: "Music",
     icon: <MusicIcon />,
-    initial: { x: 340, y: 120, width: 300, height: 380 },
-    render: () => <p>next</p>,
+    initial: { x: 340, y: 120, width: 320, height: 460 },
+    render: () => <MusicApp />,
   },
   {
     id: "about-os",

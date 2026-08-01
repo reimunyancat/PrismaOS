@@ -17,6 +17,14 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.35),
     0 10px 28px rgba(10, 25, 50, 0.35);
   z-index: 9999;
+  transition:
+    height 0.2s cubic-bezier(0.32, 0.72, 0, 1),
+    padding-bottom 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.dock--hover {
+  height: 70px;
+  padding-bottom: 9px;
 }
 
 .dock__item {
