@@ -58,7 +58,7 @@
 
 .dock__label {
   position: absolute;
-  bottom: calc(100%+10px);
+  bottom: calc(100% + 10px);
   left: 50%;
   transform: translateX(-50%);
   padding: 3px 9px;

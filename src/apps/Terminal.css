@@ -1,0 +1,38 @@
+.term {
+  height: 100%;
+  margin: -16px -18px;
+  padding: 12px 14px;
+  background: rgba(20, 22, 28, 0.92);
+  color: #d6e2cf;
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace;
+  font-size: 12.5px;
+  line-height: 1.5;
+  overflow: auto;
+  cursor: text;
+}
+.term pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.term__in {
+  color: #9fd0ff;
+}
+.term__out {
+  color: #cfd8c8;
+}
+.term__prompt {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  color: #9fd0ff;
+}
+.term__prompt input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #f0f0f0;
+  font-family: inherit;
+  font-size: inherit;
+}

@@ -4,6 +4,7 @@ export interface AppDef {
   id: string;
   title: string;
   icon: ReactNode;
+  hidden?: boolean;
   initial?: { x: number; y: number; width: number; height: number };
   render: () => ReactNode;
 }

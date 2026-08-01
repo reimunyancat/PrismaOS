@@ -9,6 +9,7 @@ import { bindOS } from "./os";
 import "./App.css";
 
 const OS_NAME = "PrismaOS";
+const VISIBLE_APPS = APPS.filter((a) => !a.hidden);
 
 export default function App() {
   const [booted, setBooted] = useState(false);
@@ -29,7 +30,7 @@ export default function App() {
 
   const handleBooted = useCallback(() => setBooted(true), []);
   const openAbout = useCallback(() => {
-    const about = APPS.find((a) => a.id === "about");
+    const about = APPS.find((a) => a.id === "about-os");
     if (about) open(about);
   }, [open]);
 
@@ -37,7 +38,7 @@ export default function App() {
     <div className="desktop">
       <MenuBar osName={OS_NAME} onAbout={openAbout} />
       <div className="desktop__icons">
-        {APPS.map((app) => (
+        {VISIBLE_APPS.map((app) => (
           <button
             key={app.id}
             className="desktop__icon"
@@ -74,7 +75,11 @@ export default function App() {
             </Window>
           );
         })}
-      <Dock apps={APPS} openIds={windows.map((w) => w.id)} onLaunch={open} />
+      <Dock
+        apps={VISIBLE_APPS}
+        openIds={windows.map((w) => w.id)}
+        onLaunch={open}
+      />
 
       {!booted && <BootScreen onDone={handleBooted} />}
     </div>

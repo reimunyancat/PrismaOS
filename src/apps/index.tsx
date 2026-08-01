@@ -6,7 +6,9 @@ import {
   TerminalIcon,
 } from "../components/icons";
 import { AboutApp } from "./AboutApp";
-import { ProjectApp } from "./ProjectsApp";
+import { AboutOSApp } from "./AboutOSApp";
+import { ProjectsApp } from "./ProjectsApp";
+import { TerminalApp } from "./TerminalApp";
 
 export const APPS: AppDef[] = [
   {
@@ -21,14 +23,14 @@ export const APPS: AppDef[] = [
     title: "Projects",
     icon: <ProjectsIcon />,
     initial: { x: 280, y: 150, width: 560, height: 400 },
-    render: () => <ProjectApp />,
+    render: () => <ProjectsApp />,
   },
   {
     id: "terminal",
-    title: "Terminal",
+    title: "Terminal - prism",
     icon: <TerminalIcon />,
     initial: { x: 210, y: 230, width: 580, height: 360 },
-    render: () => <p>next</p>,
+    render: () => <TerminalApp />,
   },
   {
     id: "music",
@@ -36,5 +38,13 @@ export const APPS: AppDef[] = [
     icon: <MusicIcon />,
     initial: { x: 340, y: 120, width: 300, height: 380 },
     render: () => <p>next</p>,
+  },
+  {
+    id: "about-os",
+    title: "About PrismaOS",
+    icon: <AboutIcon />,
+    hidden: true,
+    initial: { x: 250, y: 120, width: 320, height: 420 },
+    render: () => <AboutOSApp />,
   },
 ];
