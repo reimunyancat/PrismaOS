@@ -13,11 +13,14 @@ const VISIBLE_APPS = APPS.filter((a) => !a.hidden);
 
 export default function App() {
   const [booted, setBooted] = useState(false);
-  const { windows, open, close, focus, minimize, move, resize } = useWindows();
+  const { windows, open, close, focus, minimize, move, resize, resetLayout } =
+    useWindows();
 
   const topZ = windows
     .filter((w) => !w.minimized)
     .reduce((m, w) => Math.max(m, w.z), 0);
+  const activeId =
+    windows.find((w) => !w.minimized && w.z === topZ)?.id ?? null;
 
   useEffect(() => {
     bindOS(APPS, (id) => {
@@ -29,14 +32,36 @@ export default function App() {
   }, [open]);
 
   const handleBooted = useCallback(() => setBooted(true), []);
-  const openAbout = useCallback(() => {
-    const about = APPS.find((a) => a.id === "about-os");
-    if (about) open(about);
-  }, [open]);
+
+  const launchById = useCallback(
+    (id: string) => {
+      const app = APPS.find((a) => a.id === id);
+      if (app) open(app);
+    },
+    [open],
+  );
+
+  const openAbout = useCallback(() => launchById("about-os"), [launchById]);
+
+  const closeActive = useCallback(() => {
+    if (activeId) close(activeId);
+  }, [activeId, close]);
+
+  const minimizeActive = useCallback(() => {
+    if (activeId) minimize(activeId);
+  }, [activeId, minimize]);
 
   return (
     <div className="desktop">
-      <MenuBar osName={OS_NAME} onAbout={openAbout} />
+      <MenuBar
+        osName={OS_NAME}
+        onAbout={openAbout}
+        onLaunch={launchById}
+        onCloseActive={closeActive}
+        onMinimizeActive={minimizeActive}
+        onResetLayout={resetLayout}
+        hasActiveWindow={activeId !== null}
+      />
       <div className="desktop__icons">
         {VISIBLE_APPS.map((app) => (
           <button
@@ -50,31 +75,30 @@ export default function App() {
         ))}
       </div>
 
-      {windows
-        .filter((w) => !w.minimized)
-        .map((w) => {
-          const app = APPS.find((a) => a.id === w.id)!;
-          return (
-            <Window
-              key={w.id}
-              id={w.id}
-              title={w.title}
-              x={w.x}
-              y={w.y}
-              width={w.width}
-              height={w.height}
-              z={w.z}
-              active={w.z === topZ}
-              onFocus={focus}
-              onClose={close}
-              onMinimize={minimize}
-              onDragEnd={move}
-              onResizeEnd={resize}
-            >
-              {app.render()}
-            </Window>
-          );
-        })}
+      {windows.map((w) => {
+        const app = APPS.find((a) => a.id === w.id)!;
+        return (
+          <Window
+            key={w.id}
+            id={w.id}
+            title={w.title}
+            x={w.x}
+            y={w.y}
+            width={w.width}
+            height={w.height}
+            z={w.z}
+            active={!w.minimized && w.z === topZ}
+            minimized={w.minimized}
+            onFocus={focus}
+            onClose={close}
+            onMinimize={minimize}
+            onDragEnd={move}
+            onResizeEnd={resize}
+          >
+            {app.render()}
+          </Window>
+        );
+      })}
       <Dock
         apps={VISIBLE_APPS}
         openIds={windows.map((w) => w.id)}

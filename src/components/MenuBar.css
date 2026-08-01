@@ -21,38 +21,52 @@
 .menubar__left {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 2px;
 }
 .menubar__menu {
   position: relative;
 }
 
-.menubar__logo {
+.menubar__logo,
+.menubar__item {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   background: none;
   border: none;
   font: inherit;
-  font-weight: 700;
   color: inherit;
   cursor: default;
   padding: 3px 8px;
   border-radius: 5px;
 }
+.menubar__logo {
+  font-weight: 700;
+}
 .menubar__logo svg {
   display: block;
 }
+.menubar__item {
+  opacity: 0.85;
+}
+
+.menubar__logo:hover,
+.menubar__item:hover {
+  opacity: 1;
+  background: rgba(120, 150, 190, 0.22);
+}
 .menubar__logo.is-open,
-.menubar__logo:hover {
-  background: rgba(120, 150, 190, 0, 22);
+.menubar__item.is-open {
+  opacity: 1;
+  background: var(--accent);
+  color: #fff;
 }
 
 .menubar__dropdown {
   position: absolute;
   top: 26px;
   left: 0;
-  min-width: 190px;
+  min-width: 218px;
   padding: 5px;
   border-radius: 10px;
   background: var(--menubar-bg);
@@ -62,20 +76,43 @@
   box-shadow: 0 14px 40px rgba(10, 25, 50, 0.35);
 }
 .menubar__dropdown button {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 4px;
   width: 100%;
   text-align: left;
   background: none;
   border: none;
   font: inherit;
   color: inherit;
-  padding: 5px 10px;
+  padding: 5px 10px 5px 4px;
   border-radius: 6px;
   cursor: default;
 }
-.menubar__dropdown button:hover {
+.menubar__dropdown button:hover:not(:disabled) {
   background: var(--accent);
   color: #fff;
+}
+.menubar__dropdown button:disabled {
+  opacity: 0.35;
+}
+
+.menubar__check {
+  display: inline-block;
+  width: 14px;
+  text-align: center;
+  font-size: 11px;
+}
+.menubar__label {
+  flex: 1;
+}
+.menubar__shortcut {
+  opacity: 0.55;
+  font-size: 12px;
+  padding-left: 16px;
+}
+.menubar__dropdown button:hover:not(:disabled) .menubar__shortcut {
+  opacity: 0.8;
 }
 
 .menubar__sep {
@@ -84,20 +121,12 @@
   background: rgba(127, 127, 127, 0.3);
 }
 
-.menubar__item {
-  cursor: default;
-  opacity: 0.85;
-}
-.menubar__item:hover {
-  opacity: 1;
-}
-
 .menubar__right {
   font-variant-numeric: tabular-nums;
 }
 
 @media (max-width: 640px) {
-  .menubar__item {
+  .menubar__left .menubar__menu:not(:first-child) {
     display: none;
   }
 }

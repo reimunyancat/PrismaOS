@@ -1,4 +1,4 @@
-import { use, useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import type { AppDef, WindowInstance } from "../types";
 
 type Geom = { x: number; y: number; width: number; height: number };

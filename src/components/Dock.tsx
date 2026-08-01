@@ -1,6 +1,11 @@
 import { useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import type { AppDef } from "../types";
 import "./Dock.css";
+
+const MAX_SCALE = 1.32;
+const LIFT = 4;
+const FALLOFF = 70;
 
 interface Props {
   apps: AppDef[];
@@ -46,14 +51,19 @@ function DockItem({ app, running, pointerX, onLaunch }: ItemProps) {
   if (pointerX !== null && ref.current) {
     const r = ref.current.getBoundingClientRect();
     const d = Math.abs(pointerX - (r.left + r.width / 2));
-    scale = 1 + 0.6 * Math.exp(-(d * d) / (2 * 70 * 70));
+    scale = 1 + (MAX_SCALE - 1) * Math.exp(-(d * d) / (2 * FALLOFF * FALLOFF));
   }
+
+  const style = {
+    transform: `scale(${scale}) translateY(${(scale - 1) * -LIFT}px)`,
+    "--inv": 1 / scale,
+  } as CSSProperties;
 
   return (
     <button
       ref={ref}
       className="dock__item"
-      style={{ transform: `scale(${scale}) translateY(${(scale - 1) * -8}px)` }}
+      style={style}
       onClick={() => onLaunch(app)}
     >
       <span className="dock__label">{app.title}</span>

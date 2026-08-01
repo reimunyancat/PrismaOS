@@ -11,7 +11,7 @@ export function AboutApp() {
         <li>
           GitHub:{" "}
           <a
-            href="https//github.com/reimunyancat"
+            href="https://github.com/reimunyancat"
             target="_blank"
             rel="noreferrer"
           >

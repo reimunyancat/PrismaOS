@@ -24,6 +24,10 @@
   }
 }
 
+.win--hidden {
+  display: none;
+}
+
 .win--minimizing {
   animation: win-genie 0.42s cubic-bezier(0.4, 0, 0.7, 1) forwards;
   transform-origin: bottom center;
@@ -50,8 +54,8 @@
   left: 0 !important;
   top: 26px !important;
   width: 100vw !important;
-  height: calc(100vh - 26px - 74px) !important;
-  height: calc(100dvh - 26px - 74px) !important;
+  height: calc(100vh - 26px - 92px) !important;
+  height: calc(100dvh - 26px - 92px) !important;
   border-radius: 0;
   transition:
     left 0.22s ease,
@@ -107,7 +111,7 @@
 .light--min {
   background: radial-gradient(circle at 35% 30%, #ffd279, var(--light-min));
 }
-.light-max {
+.light--max {
   background: radial-gradient(circle at 35% 30%, #74e081, var(--light-max));
 }
 
@@ -126,6 +130,7 @@
 
 .win__body {
   flex: 1;
+  min-height: 0;
   padding: 16px 18px;
   overflow: auto;
   font-size: 13.5px;

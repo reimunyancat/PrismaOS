@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import type { ReactNode } from "react";
 import { useDraggable } from "../hooks/useDraggable";
 import "./Window.css";
@@ -12,19 +12,20 @@ interface Props {
   height: number;
   z: number;
   active: boolean;
+  minimized: boolean;
   children: ReactNode;
   onFocus: (id: string) => void;
   onClose: (id: string) => void;
   onMinimize: (id: string) => void;
-  onDragEnd: (id: string, w: number, y: number) => void;
+  onDragEnd: (id: string, x: number, y: number) => void;
   onResizeEnd: (id: string, width: number, height: number) => void;
 }
 
 export function Window(props: Props) {
-  const { id, title, x, y, width, height, z, active, children } = props;
+  const { id, title, x, y, width, height, z, active, minimized, children } =
+    props;
   const [zoomed, setZoomed] = useState(false);
   const [minimizing, setMinimizing] = useState(false);
-  const dim = useRef({ w: width, h: height });
   const { elRef, onPointerDown } = useDraggable({
     x,
     y,
@@ -35,23 +36,23 @@ export function Window(props: Props) {
     (e: React.PointerEvent<HTMLDivElement>) => {
       e.preventDefault();
       e.stopPropagation();
+      const el = elRef.current;
+      if (!el) return;
+
       const handle = e.currentTarget;
       handle.setPointerCapture(e.pointerId);
       const startX = e.clientX;
       const startY = e.clientY;
-      const startW = dim.current.w;
-      const startH = dim.current.h;
+      const startW = el.offsetWidth;
+      const startH = el.offsetHeight;
+      let nextW = startW;
+      let nextH = startH;
 
       const onMove = (ev: PointerEvent) => {
-        dim.current = {
-          w: Math.max(280, startW + ev.clientX - startX),
-          h: Math.max(180, startH + ev.clientY - startY),
-        };
-        const el = elRef.current;
-        if (el) {
-          el.style.width = `${dim.current.w}px`;
-          el.style.height = `${dim.current.h}px`;
-        }
+        nextW = Math.max(280, startW + ev.clientX - startX);
+        nextH = Math.max(180, startH + ev.clientY - startY);
+        el.style.width = `${nextW}px`;
+        el.style.height = `${nextH}px`;
       };
       const onUp = (ev: PointerEvent) => {
         if (handle.hasPointerCapture(ev.pointerId))
@@ -59,7 +60,7 @@ export function Window(props: Props) {
         handle.removeEventListener("pointermove", onMove);
         handle.removeEventListener("pointerup", onUp);
         handle.removeEventListener("pointercancel", onUp);
-        props.onResizeEnd(id, dim.current.w, dim.current.h);
+        props.onResizeEnd(id, nextW, nextH);
       };
       handle.addEventListener("pointermove", onMove);
       handle.addEventListener("pointerup", onUp);
@@ -78,10 +79,20 @@ export function Window(props: Props) {
 
   const winStyle = { left: x, top: y, width, height, zIndex: z };
 
+  const classes = [
+    "win",
+    active ? "win--active" : "",
+    zoomed ? "win--zoom" : "",
+    minimizing ? "win--minimizing" : "",
+    minimized && !minimizing ? "win--hidden" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <div
       ref={elRef}
-      className={`win ${active ? "win--active" : ""} ${zoomed ? "win--zoom" : ""} ${minimizing ? "win--minimizing" : ""}`}
+      className={classes}
       style={winStyle}
       onPointerDown={() => props.onFocus(id)}
       onAnimationEnd={onGenieEnd}

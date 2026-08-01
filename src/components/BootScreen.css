@@ -2,55 +2,150 @@
   position: fixed;
   inset: 0;
   z-index: 100000;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  background: radial-gradient(900px 600px at 50% 38%, #1a2238 0%, #0a0e18 70%);
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(
+      760px 520px at 50% 34%,
+      rgba(56, 189, 248, 0.16) 0%,
+      transparent 70%
+    ),
+    radial-gradient(900px 620px at 50% 40%, #16203a 0%, #070a12 72%);
   color: #eef2f7;
-  transition: opacity 0.55s ease;
+  transition: opacity 0.52s ease;
 }
 .boot--leaving {
   opacity: 0;
   pointer-events: none;
 }
 
+.boot__stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  animation: boot-in 0.5s ease both;
+}
+
+/* prism block: logo sitting on a slow refraction sweep */
+.boot__glass {
+  position: relative;
+  width: 116px;
+  height: 116px;
+  display: grid;
+  place-items: center;
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 24px 60px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+.boot__beam {
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(56, 189, 248, 0.5) 40deg,
+    rgba(139, 92, 246, 0.5) 90deg,
+    rgba(236, 72, 153, 0.45) 140deg,
+    transparent 200deg
+  );
+  filter: blur(16px);
+  animation: boot-sweep 3.4s linear infinite;
+}
 .boot__logo {
-  color: #eef2f7;
-  filter: drop-shadow(0 0 26px rgba(140, 190, 255, 0.7));
-  animation: boot-pulse 1.6s ease-in-out infinite;
+  position: relative;
+  color: #f4f8ff;
+  filter: drop-shadow(0 0 18px rgba(150, 200, 255, 0.55));
 }
 .boot__logo svg {
   display: block;
 }
+
 .boot__name {
-  font-size: 15px;
-  letter-spacing: 0.18em;
-  opacity: 0.8;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.boot__name span {
+  background: linear-gradient(90deg, #38bdf8, #8b5cf6, #ec4899);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .boot__bar {
-  width: 180px;
-  height: 5px;
-  border-radius: 3px;
-  background: rgba(255, 255, 255, 0.16);
+  width: 260px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.12);
   overflow: hidden;
 }
 .boot__fill {
   height: 100%;
-  border-radius: 3px;
+  border-radius: 2px;
   background: linear-gradient(90deg, #38bdf8, #8b5cf6, #ec4899);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.7);
+  transition: width 0.12s linear;
 }
 
-@keyframes boot-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1;
+.boot__log {
+  width: 260px;
+  min-height: 104px;
+  font-family:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.55;
+  color: rgba(226, 236, 250, 0.62);
+}
+.boot__line {
+  animation: boot-line 0.28s ease both;
+  white-space: pre;
+}
+
+.boot__hint {
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: rgba(226, 236, 250, 0.32);
+}
+
+@keyframes boot-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
   }
-  50% {
-    transform: scale(1.06);
-    opacity: 0.85;
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes boot-sweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes boot-line {
+  from {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boot__beam,
+  .boot__stage,
+  .boot__line {
+    animation: none;
+  }
+  .boot__fill {
+    transition: none;
   }
 }

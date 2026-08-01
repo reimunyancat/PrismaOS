@@ -28,7 +28,7 @@ export const APPS: AppDef[] = [
   },
   {
     id: "terminal",
-    title: "Terminal - prism",
+    title: "Terminal",
     icon: <TerminalIcon />,
     initial: { x: 210, y: 230, width: 580, height: 360 },
     render: () => <TerminalApp />,

@@ -134,6 +134,6 @@ const FASTFETCH = [
   "      /\\        prism@prismaos",
   "     /  \\       ---------------",
   "    / /\\ \\      OS: PrismaOS (web)",
-  "   / ____ \\     Shell: prism-sh",
+  "   /____\\     Shell: prism-sh",
   "  /_/    \\_\\    Theme: Aqua Liquid",
 ].join("\n");
