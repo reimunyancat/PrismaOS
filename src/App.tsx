@@ -3,7 +3,10 @@ import { BootScreen } from "./components/BootScreen";
 import { MenuBar } from "./components/MenuBar";
 import { Dock } from "./components/Dock";
 import { Window } from "./components/Window";
+import { Spotlight } from "./components/Spotlight";
+import { useHotkeys } from "./hooks/useHotKeys";
 import { useWindows } from "./hooks/useWindows";
+import type { WindowInstance } from "./types";
 import { APPS } from "./apps";
 import { bindOS } from "./os";
 import "./App.css";
@@ -13,6 +16,7 @@ const VISIBLE_APPS = APPS.filter((a) => !a.hidden);
 
 export default function App() {
   const [booted, setBooted] = useState(false);
+  const [spotlight, setSpotlight] = useState(false);
   const { windows, open, close, focus, minimize, move, resize, resetLayout } =
     useWindows();
 
@@ -32,7 +36,6 @@ export default function App() {
   }, [open]);
 
   const handleBooted = useCallback(() => setBooted(true), []);
-
   const launchById = useCallback(
     (id: string) => {
       const app = APPS.find((a) => a.id === id);
@@ -40,16 +43,43 @@ export default function App() {
     },
     [open],
   );
-
   const openAbout = useCallback(() => launchById("about-os"), [launchById]);
-
+  const openById = useCallback(
+    (id: string) => {
+      const app = APPS.find((a) => a.id === id);
+      if (app) open(app);
+    },
+    [open],
+  );
+  const front = windows
+    .filter((w) => !w.minimized)
+    .reduce<WindowInstance | null>(
+      (top, w) => (!top || w.z > top.z ? w : top),
+      null,
+    );
   const closeActive = useCallback(() => {
     if (activeId) close(activeId);
   }, [activeId, close]);
-
   const minimizeActive = useCallback(() => {
     if (activeId) minimize(activeId);
   }, [activeId, minimize]);
+
+  useHotkeys({
+    onSpotlight: () => setSpotlight((v) => !v),
+    onClose: () => {
+      if (front) close(front.id);
+    },
+    onMinimize: () => {
+      if (front) minimize(front.id);
+    },
+    onSettings: () => openById("settings"),
+    onCycle: () => {
+      const visible = windows.filter((w) => !w.minimized);
+      if (visible.length < 2) return;
+      const sorted = [...visible].sort((a, b) => a.z - b.z);
+      focus(sorted[sorted.length - 2].id);
+    },
+  });
 
   return (
     <div className="desktop">
@@ -104,7 +134,13 @@ export default function App() {
         openIds={windows.map((w) => w.id)}
         onLaunch={open}
       />
-
+      {spotlight && (
+        <Spotlight
+          apps={VISIBLE_APPS}
+          onLaunch={open}
+          onClose={() => setSpotlight(false)}
+        />
+      )}
       {!booted && <BootScreen onDone={handleBooted} />}
     </div>
   );

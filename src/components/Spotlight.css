@@ -1,0 +1,98 @@
+.spot__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 15vh;
+  background: rgba(8, 12, 20, 0.28);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.spot {
+  width: min(560px, 92vw);
+  border-radius: 16px;
+  background: var(--window-bg);
+  border: var(--border-window);
+  box-shadow:
+    inset 0 1px 0 var(--glass-edge),
+    0 30px 70px rgba(10, 25, 50, 0.45);
+  backdrop-filter: blur(22px) saturate(170%);
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+  overflow: hidden;
+  animation: spot-in 0.14s ease-out;
+}
+@keyframes spot-in {
+  from {
+    transform: translateY(-8px) scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.spot__field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+}
+.spot__glyph {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-soft);
+  border: 1px solid rgba(127, 127, 127, 0.3);
+  border-radius: 6px;
+  padding: 2px 6px;
+}
+.spot__field input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font: inherit;
+  font-size: 17px;
+  color: var(--text-strong);
+}
+
+.spot__list {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  border-top: 1px solid rgba(127, 127, 127, 0.18);
+  max-height: 320px;
+  overflow: auto;
+}
+.spot__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 12px;
+  border-radius: 9px;
+  font-size: 13.5px;
+  color: var(--text-strong);
+  cursor: default;
+}
+.spot__row.is-active {
+  background: var(--accent);
+  color: #fff;
+}
+.spot__hint {
+  font-size: 11.5px;
+  opacity: 0.7;
+}
+.spot__row.is-active .spot__hint {
+  color: #fff;
+}
+
+@media (max-width: 640px) {
+  .spot__backdrop {
+    padding-top: 8vh;
+  }
+}
