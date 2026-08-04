@@ -53,3 +53,12 @@ export function MusicIcon({ size = 24 }: IconProps) {
     </svg>
   );
 }
+
+export function SettingsIcon({ size = 24 }: IconProps) {
+  return (
+    <svg {...base(size)} aria-hidden="true">
+      <circle cx="12" cy="12" r="3.2" />
+      <path d="M12 2.8v2.4M12 18.8v2.4M4.5 12H2.1M21.9 12h-2.4M6.7 6.7 5 5M19 19l-1.7-1.7M6.7 17.3 5 19M19 5l-1.7 1.7" />
+    </svg>
+  );
+}

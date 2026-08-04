@@ -10,6 +10,8 @@ import { AboutOSApp } from "./AboutOSApp";
 import { MusicApp } from "./MusicApp";
 import { ProjectsApp } from "./ProjectsApp";
 import { TerminalApp } from "./TerminalApp";
+import { SettingsIcon } from "../components/icons";
+import { SettingsApp } from "./SettingsApp";
 
 export const APPS: AppDef[] = [
   {
@@ -39,6 +41,13 @@ export const APPS: AppDef[] = [
     icon: <MusicIcon />,
     initial: { x: 340, y: 120, width: 320, height: 460 },
     render: () => <MusicApp />,
+  },
+  {
+    id: "settings",
+    title: "Settings",
+    icon: <SettingsIcon />,
+    initial: { x: 240, y: 140, width: 430, height: 470 },
+    render: () => <SettingsApp />,
   },
   {
     id: "about-os",
