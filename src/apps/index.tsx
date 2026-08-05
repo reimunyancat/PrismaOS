@@ -1,6 +1,7 @@
 import type { AppDef } from "../types";
 import {
   AboutIcon,
+  FilesIcon,
   MusicIcon,
   ProjectsIcon,
   TerminalIcon,
@@ -10,6 +11,7 @@ import { AboutOSApp } from "./AboutOSApp";
 import { MusicApp } from "./MusicApp";
 import { ProjectsApp } from "./ProjectsApp";
 import { TerminalApp } from "./TerminalApp";
+import { FilesApp } from "./FilesApp";
 import { SettingsIcon } from "../components/icons";
 import { SettingsApp } from "./SettingsApp";
 
@@ -41,6 +43,13 @@ export const APPS: AppDef[] = [
     icon: <MusicIcon />,
     initial: { x: 340, y: 120, width: 320, height: 460 },
     render: () => <MusicApp />,
+  },
+  {
+    id: "files",
+    title: "Files",
+    icon: <FilesIcon />,
+    initial: { x: 170, y: 118, width: 620, height: 420 },
+    render: () => <FilesApp />,
   },
   {
     id: "settings",

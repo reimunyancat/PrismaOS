@@ -1,17 +1,28 @@
 import { useEffect, useRef, useState } from "react";
-import { launchApp, listApps, setTheme, THEMES } from "../os";
+import {
+  launchApp,
+  listApps,
+  setTheme,
+  setWallpaper,
+  THEMES,
+  WALLPAPERS,
+} from "../os";
+import { HOME, getNode, listDir, normalizePath, shortPath } from "../fs";
 import "./Terminal.css";
 
 interface Line {
   kind: "in" | "out";
   text: string;
+  cwd?: string;
 }
 
-const BANNER = "PrismaOS Terminal";
+const BANNER =
+  "PrismaOS Terminal 0.3 — type 'help' to get started. (ctrl + K opens Spotlight)";
 
 export function TerminalApp() {
   const [lines, setLines] = useState<Line[]>([{ kind: "out", text: BANNER }]);
   const [input, setInput] = useState("");
+  const [cwd, setCwd] = useState(HOME);
   const histRef = useRef<string[]>([]);
   const histIdx = useRef(-1);
   const termRef = useRef<HTMLDivElement>(null);
@@ -31,24 +42,77 @@ export function TerminalApp() {
         break;
       case "help":
         out.push(
-          "help, about, projects, ls, open <app>, theme <name>, fastfetch, clear",
+          "help,  about,  projects,  ls,  cd,  pwd,  cat <file>,  open <app|file>,  apps",
+        );
+        out.push(
+          "theme <name>,  wallpaper <name>,  fastfetch,  clear    (ctrl + K Spotlight, ctrl + , Settings)",
         );
         break;
       case "about":
-        out.push("reimunyancat - student");
+        out.push("reimunyancat — developer Run 'open about' for more.");
         break;
       case "projects":
-        out.push(
-          "Ephemeris, DIVE, AudiLex, Artifact, Enigma, WaitForSale, PrismaOS, etc.",
-        );
+        out.push("Enigma, DIVE, etc.  PrismaOS — 'open projects'");
         break;
-      case "ls":
+      case "apps":
         out.push(listApps().join("  "));
         break;
-      case "open":
-        if (!arg) out.push("usage: open <app>");
-        else if (launchApp(arg)) out.push(`opening ${arg}...`);
-        else out.push(`open: no such app: ${arg}`);
+      case "pwd":
+        out.push(cwd);
+        break;
+      case "ls": {
+        const showHidden = arg === "-a";
+        const target = arg && !showHidden ? normalizePath(cwd, arg) : cwd;
+        const items = listDir(target, showHidden);
+        if (!items) out.push(`ls: no such directory: ${arg}`);
+        else if (items.length === 0) out.push("(empty)");
+        else
+          out.push(
+            items
+              .map((n) => (n.type === "dir" ? `${n.name}/` : n.name))
+              .join("  "),
+          );
+        break;
+      }
+      case "cd": {
+        const target = arg ? normalizePath(cwd, arg) : HOME;
+        const node = getNode(target);
+        if (!node || node.type !== "dir")
+          out.push(`cd: no such directory: ${arg}`);
+        else setCwd(target);
+        break;
+      }
+      case "cat": {
+        if (!arg) {
+          out.push("usage: cat <file>");
+          break;
+        }
+        const node = getNode(normalizePath(cwd, arg));
+        if (!node) out.push(`cat: no such file: ${arg}`);
+        else if (node.type === "dir") out.push(`cat: ${arg}: is a directory`);
+        else out.push(node.content);
+        break;
+      }
+      case "open": {
+        if (!arg) {
+          out.push("usage: open <app|file>");
+          break;
+        }
+        if (launchApp(arg)) {
+          out.push(`opening ${arg}…`);
+          break;
+        }
+        const node = getNode(normalizePath(cwd, arg));
+        if (node && node.type === "file" && node.app && launchApp(node.app)) {
+          out.push(`opening ${node.app}…`);
+        } else {
+          out.push(`open: no such app or file: ${arg}`);
+        }
+        break;
+      }
+      case "wallpaper":
+        if (arg && setWallpaper(arg)) out.push(`wallpaper → ${arg}`);
+        else out.push(`usage: wallpaper <${WALLPAPERS.join(" | ")}>`);
         break;
       case "theme":
         if (arg && setTheme(arg)) out.push(`theme → ${arg}`);
@@ -61,19 +125,19 @@ export function TerminalApp() {
         setLines([]);
         return;
       case "sudo":
-        out.push("prism: You already have full authority.");
+        out.push("prism: you already have every permission.");
         break;
       case "secret":
         out.push(
-          "[hidden] There are hidden themes — try entering 'theme midnight' or 'theme aurora'",
+          "[hidden] there are hidden themes — try 'theme midnight' or 'theme aurora'.",
         );
         break;
       default:
-        out.push(`command not found: ${cmd}  (Refer to 'help')`);
+        out.push(`command not found: ${cmd}  (see 'help')`);
     }
     setLines((prev) => [
       ...prev,
-      { kind: "in", text: raw.trim() },
+      { kind: "in", text: raw.trim(), cwd },
       ...out.map((t) => ({ kind: "out" as const, text: t })),
     ]);
   }
@@ -114,11 +178,13 @@ export function TerminalApp() {
     >
       {lines.map((l, i) => (
         <pre key={i} className={l.kind === "in" ? "term__in" : "term__out"}>
-          {l.kind === "in" ? `prism $ ${l.text}` : l.text}
+          {l.kind === "in"
+            ? `prism ${shortPath(l.cwd ?? HOME)} $ ${l.text}`
+            : l.text}
         </pre>
       ))}
       <div className="term__prompt">
-        <span>prism $</span>
+        <span>{`prism ${shortPath(cwd)} $`}</span>
         <input
           autoFocus
           value={input}

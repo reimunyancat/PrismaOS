@@ -23,7 +23,6 @@ export function AboutIcon({ size = 24 }: IconProps) {
     </svg>
   );
 }
-
 export function ProjectsIcon({ size = 24 }: IconProps) {
   return (
     <svg {...base(size)} aria-hidden="true">
@@ -33,7 +32,6 @@ export function ProjectsIcon({ size = 24 }: IconProps) {
     </svg>
   );
 }
-
 export function TerminalIcon({ size = 24 }: IconProps) {
   return (
     <svg {...base(size)} aria-hidden="true">
@@ -43,7 +41,6 @@ export function TerminalIcon({ size = 24 }: IconProps) {
     </svg>
   );
 }
-
 export function MusicIcon({ size = 24 }: IconProps) {
   return (
     <svg {...base(size)} aria-hidden="true">
@@ -53,12 +50,19 @@ export function MusicIcon({ size = 24 }: IconProps) {
     </svg>
   );
 }
-
 export function SettingsIcon({ size = 24 }: IconProps) {
   return (
     <svg {...base(size)} aria-hidden="true">
       <circle cx="12" cy="12" r="3.2" />
       <path d="M12 2.8v2.4M12 18.8v2.4M4.5 12H2.1M21.9 12h-2.4M6.7 6.7 5 5M19 19l-1.7-1.7M6.7 17.3 5 19M19 5l-1.7 1.7" />
+    </svg>
+  );
+}
+export function FilesIcon({ size = 24 }: IconProps) {
+  return (
+    <svg {...base(size)} aria-hidden="true">
+      <path d="M3 7.4a2 2 0 0 1 2-2h4l2 2.4h8a2 2 0 0 1 2 2v8.8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z" />
+      <path d="M3 11.2h18" />
     </svg>
   );
 }
