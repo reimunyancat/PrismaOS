@@ -43,7 +43,7 @@ const foot: CSSProperties = {
 };
 
 const SPECS: [string, string][] = [
-  ["Engine", "React 18 + TypeScript"],
+  ["Engine", "React 19 + TypeScript"],
   ["Windowing", "useWindows (implement from scratch)"],
   ["Shell", "Aqua Liquid Glass"],
   ["Themes", "aqua, graphite, midnight, aurora"],

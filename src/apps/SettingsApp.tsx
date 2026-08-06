@@ -47,12 +47,6 @@ const ghost: CSSProperties = {
   fontSize: 12.5,
   cursor: "pointer",
 };
-const hint: CSSProperties = {
-  fontSize: 11.5,
-  color: "var(--text-soft)",
-  marginTop: 6,
-};
-
 const chip = (on: boolean): CSSProperties => ({
   padding: "6px 12px",
   borderRadius: 8,
@@ -65,7 +59,6 @@ const chip = (on: boolean): CSSProperties => ({
   fontSize: 12.5,
   cursor: "pointer",
 });
-
 const swatch = (hex: string, on: boolean): CSSProperties => ({
   width: 26,
   height: 26,
