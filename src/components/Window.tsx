@@ -17,7 +17,12 @@ interface Props {
   onFocus: (id: string) => void;
   onClose: (id: string) => void;
   onMinimize: (id: string) => void;
-  onDragEnd: (id: string, x: number, y: number) => void;
+  onDragEnd: (
+    id: string,
+    x: number,
+    y: number,
+    pointer: { x: number; y: number },
+  ) => void;
   onResizeEnd: (id: string, width: number, height: number) => void;
 }
 
@@ -29,7 +34,7 @@ export function Window(props: Props) {
   const { elRef, onPointerDown } = useDraggable({
     x,
     y,
-    onDragEnd: (nx, ny) => props.onDragEnd(id, nx, ny),
+    onDragEnd: (nx, ny, pointer) => props.onDragEnd(id, nx, ny, pointer),
   });
 
   const onResizeStart = useCallback(

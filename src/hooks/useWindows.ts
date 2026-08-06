@@ -2,7 +2,11 @@ import { useCallback, useRef, useState } from "react";
 import type { AppDef, WindowInstance } from "../types";
 
 type Geom = { x: number; y: number; width: number; height: number };
-const LAYOUT_KEY = "prisma-layout";
+export type SnapZone = "left" | "right" | "full";
+
+const LAYOUT_KEY = "prisma-layout-v2";
+const MENUBAR_H = 26;
+const DOCK_H = 74;
 
 function loadLayout(): Record<string, Geom> {
   try {
@@ -41,9 +45,8 @@ export function useWindows() {
           w.id === app.id ? { ...w, minimized: false, z: zCounter.current } : w,
         );
       const saved = loadLayout()[app.id];
-      const init = clampGeom(
-        saved ?? app.initial ?? { x: 120, y: 90, width: 460, height: 340 },
-      );
+      const base = app.initial ?? { x: 120, y: 90, width: 460, height: 340 };
+      const init = clampGeom({ ...base, ...saved });
       return [
         ...prev,
         {
@@ -103,5 +106,40 @@ export function useWindows() {
     );
   }, []);
 
-  return { windows, open, close, focus, minimize, move, resize, resetLayout };
+  const snap = useCallback((id: string, zone: SnapZone) => {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const height = vh - MENUBAR_H - DOCK_H;
+    const half = Math.round(vw / 2);
+    const geom: Geom =
+      zone === "left"
+        ? { x: 0, y: MENUBAR_H, width: half, height }
+        : zone === "right"
+          ? { x: half, y: MENUBAR_H, width: vw - half, height }
+          : { x: 0, y: MENUBAR_H, width: vw, height };
+    saveGeom(id, geom);
+    setWindows((prev) =>
+      prev.map((w) => (w.id === id ? { ...w, ...geom } : w)),
+    );
+  }, []);
+
+  return {
+    windows,
+    open,
+    close,
+    focus,
+    minimize,
+    move,
+    resize,
+    resetLayout,
+    snap,
+  };
+}
+
+export function snapZone(px: number, py: number): SnapZone | null {
+  const EDGE = 12;
+  if (py <= MENUBAR_H + EDGE) return "full";
+  if (px <= EDGE) return "left";
+  if (px >= window.innerWidth - EDGE) return "right";
+  return null;
 }

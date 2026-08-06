@@ -5,7 +5,7 @@ import { Dock } from "./components/Dock";
 import { Window } from "./components/Window";
 import { Spotlight } from "./components/Spotlight";
 import { useHotkeys } from "./hooks/useHotKeys";
-import { useWindows } from "./hooks/useWindows";
+import { snapZone, useWindows } from "./hooks/useWindows";
 import type { WindowInstance } from "./types";
 import { APPS } from "./apps";
 import { bindOS } from "./os";
@@ -17,8 +17,17 @@ const VISIBLE_APPS = APPS.filter((a) => !a.hidden);
 export default function App() {
   const [booted, setBooted] = useState(false);
   const [spotlight, setSpotlight] = useState(false);
-  const { windows, open, close, focus, minimize, move, resize, resetLayout } =
-    useWindows();
+  const {
+    windows,
+    open,
+    close,
+    focus,
+    minimize,
+    move,
+    resize,
+    resetLayout,
+    snap,
+  } = useWindows();
 
   const topZ = windows
     .filter((w) => !w.minimized)
@@ -63,6 +72,15 @@ export default function App() {
   const minimizeActive = useCallback(() => {
     if (activeId) minimize(activeId);
   }, [activeId, minimize]);
+
+  const handleDragEnd = useCallback(
+    (id: string, x: number, y: number, pointer: { x: number; y: number }) => {
+      const zone = snapZone(pointer.x, pointer.y);
+      if (zone) snap(id, zone);
+      else move(id, x, y);
+    },
+    [move, snap],
+  );
 
   useHotkeys({
     onSpotlight: () => setSpotlight((v) => !v),
@@ -122,7 +140,7 @@ export default function App() {
             onFocus={focus}
             onClose={close}
             onMinimize={minimize}
-            onDragEnd={move}
+            onDragEnd={handleDragEnd}
             onResizeEnd={resize}
           >
             {app.render()}

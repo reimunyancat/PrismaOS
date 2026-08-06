@@ -57,7 +57,7 @@ export function AboutOSApp() {
         <Logo size={64} />
       </div>
       <div style={osName}>PrismaOS</div>
-      <div style={version}>Version 0.2.0</div>
+      <div style={version}>Version 0.3.0</div>
       <div style={specs}>
         {SPECS.map(([k, v]) => (
           <div key={k} style={row}>
